@@ -1,0 +1,26 @@
+{
+  "model_architecture": "EfficientNet-B0 + 2D FFT Frequency Hybrid Network",
+  "input_size": [
+    224,
+    224
+  ],
+  "normalization": {
+    "mean": [
+      0.485,
+      0.456,
+      0.406
+    ],
+    "std": [
+      0.229,
+      0.224,
+      0.225
+    ]
+  },
+  "class_mapping": {
+    "0": "REAL",
+    "1": "AI_GENERATED"
+  },
+  "classification_threshold": 0.3,
+  "uncertainty_lower": 0.25,
+  "uncertainty_upper": 0.35
+}
