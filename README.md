@@ -145,19 +145,18 @@ AI-Image-Video-Detector/
 
 ---
 
-## 🔍 API Verification Endpoint
+## ☁️ Render Deployment Configuration
 
-To test system health and frontend-backend connectivity, query:
+When deploying the backend web service on Render, ensure the following configuration is used (defined in `render.yaml`):
 
-* **Endpoint**: `GET /api/health`
-* **Sample Response**:
-  ```json
-  {
-    "status": "ok",
-    "service": "AI-Image-Video-Detector API",
-    "version": "1.0.0",
-    "timestamp": "2026-08-16T23:12:00.000Z",
-    "environment": "development",
-    "database": "connected"
-  }
+* **Root Directory**: `backend`
+* **Build Command**:
+  ```bash
+  pip install --upgrade pip && pip install --index-url https://download.pytorch.org/whl/cpu torch==2.3.0 torchvision==0.18.0 && pip install -r requirements.txt
   ```
+* **Start Command**:
+  ```bash
+  gunicorn app:app
+  ```
+> **Note**: Because the Root Directory is set to `backend`, do **NOT** use `--chdir backend` in the Start Command in the Render Web Dashboard UI.
+
