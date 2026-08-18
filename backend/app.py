@@ -1,4 +1,5 @@
 import os
+import re
 from datetime import datetime, timezone
 from dotenv import load_dotenv
 
@@ -21,13 +22,14 @@ def create_app(config_name=None):
     app = Flask(__name__)
     app.config.from_object(config_by_name.get(config_name, config_by_name['default']))
 
-    # Configure CORS
+    # Configure CORS with compiled regex for dynamic Vercel subdomains
     allowed_origins = [
         "http://localhost:3000",
         "http://127.0.0.1:3000",
         "http://localhost:5173",
         "http://127.0.0.1:5173",
         "https://godseye-three.vercel.app",
+        re.compile(r"^https://.*\.vercel\.app$")
     ]
 
     frontend_env = app.config.get('FRONTEND_URL') or os.environ.get('FRONTEND_URL')
@@ -49,7 +51,15 @@ def create_app(config_name=None):
     def apply_cors_headers(response):
         origin = request.headers.get('Origin')
         if origin:
-            is_allowed = origin in allowed_origins or (isinstance(origin, str) and origin.endswith('.vercel.app'))
+            is_allowed = False
+            if origin in allowed_origins or (isinstance(origin, str) and origin.endswith('.vercel.app')):
+                is_allowed = True
+            else:
+                for pattern in allowed_origins:
+                    if hasattr(pattern, 'search') and pattern.search(origin):
+                        is_allowed = True
+                        break
+
             if is_allowed:
                 response.headers['Access-Control-Allow-Origin'] = origin
                 response.headers['Access-Control-Allow-Credentials'] = 'true'
