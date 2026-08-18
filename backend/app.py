@@ -22,8 +22,29 @@ def create_app(config_name=None):
     app.config.from_object(config_by_name.get(config_name, config_by_name['default']))
 
     # Configure CORS
-    frontend_url = app.config.get('FRONTEND_URL', '*')
-    CORS(app, resources={r"/api/*": {"origins": [frontend_url, "http://localhost:3000", "http://localhost:5173", "http://127.0.0.1:3000", "http://127.0.0.1:5173"]}}, supports_credentials=True)
+    allowed_origins = [
+        "http://localhost:3000",
+        "http://127.0.0.1:3000",
+        "http://localhost:5173",
+        "http://127.0.0.1:5173",
+        "https://godseye-three.vercel.app",
+        r"https://.*\.vercel\.app"
+    ]
+
+    frontend_env = app.config.get('FRONTEND_URL') or os.environ.get('FRONTEND_URL')
+    if frontend_env:
+        for url in frontend_env.split(','):
+            cleaned = url.strip()
+            if cleaned and cleaned != '*' and cleaned not in allowed_origins:
+                allowed_origins.append(cleaned)
+
+    CORS(
+        app,
+        resources={r"/api/*": {"origins": allowed_origins}},
+        methods=["GET", "POST", "OPTIONS"],
+        allow_headers=["Content-Type", "Authorization", "X-Requested-With", "Accept", "Origin"],
+        supports_credentials=True
+    )
 
     # Initialize Database & Flask-Migrate
     init_db(app)

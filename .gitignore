@@ -55,6 +55,8 @@ data/**
 backend/ml/models/*.pth
 backend/ml/models/*.pt
 backend/ml/models/*.onnx
+!backend/ml/models/best_model.pth
+!backend/ml/models/video_temporal_model.pth
 
 # IDE & OS
 .vscode/

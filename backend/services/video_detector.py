@@ -25,9 +25,14 @@ class VideoDetectorService:
         base_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
         models_dir = os.path.join(base_dir, 'ml', 'models')
 
-        spatial_ckpt = os.path.join(models_dir, 'best_model.pth')
-        temporal_ckpt = os.path.join(models_dir, 'video_temporal_model.pth')
-        fusion_cfg_path = os.path.join(models_dir, 'fusion_config.json')
+        spatial_ckpt = os.path.abspath(os.path.join(models_dir, 'best_model.pth'))
+        temporal_ckpt = os.path.abspath(os.path.join(models_dir, 'video_temporal_model.pth'))
+        fusion_cfg_path = os.path.abspath(os.path.join(models_dir, 'fusion_config.json'))
+
+        if not os.path.exists(spatial_ckpt):
+            raise FileNotFoundError(f"Spatial model checkpoint not found at: '{spatial_ckpt}'. Ensure best_model.pth is committed and deployed.")
+        if not os.path.exists(temporal_ckpt):
+            raise FileNotFoundError(f"Temporal model checkpoint not found at: '{temporal_ckpt}'. Ensure video_temporal_model.pth is committed and deployed.")
 
         self.device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
         self.frame_extractor = FrameExtractor(target_sample_fps=1.0, max_frames=16)

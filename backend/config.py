@@ -35,13 +35,17 @@ class Config:
         'max_overflow': 5
     }
     
-    # Uploads & Storage
-    UPLOAD_FOLDER = os.environ.get('UPLOAD_FOLDER', os.path.abspath(os.path.join(BASE_DIR, '..', 'uploads')))
+    # Uploads & Storage (Path-safe absolute paths)
+    raw_upload_dir = os.environ.get('UPLOAD_FOLDER', 'uploads')
+    UPLOAD_FOLDER = os.path.abspath(raw_upload_dir if os.path.isabs(raw_upload_dir) else os.path.join(BASE_DIR, raw_upload_dir))
+
+    raw_model_path = os.environ.get('MODEL_PATH', os.path.join('ml', 'models', 'best_model.pth'))
+    MODEL_PATH = os.path.abspath(raw_model_path if os.path.isabs(raw_model_path) else os.path.join(BASE_DIR, raw_model_path))
+
     MAX_CONTENT_LENGTH = int(os.environ.get('MAX_UPLOAD_SIZE', 100 * 1024 * 1024))
     ALLOWED_IMAGE_EXTENSIONS = {'png', 'jpg', 'jpeg', 'webp', 'bmp'}
     ALLOWED_VIDEO_EXTENSIONS = {'mp4', 'avi', 'mov', 'mkv', 'webm'}
-    MODEL_PATH = os.environ.get('MODEL_PATH', os.path.join(BASE_DIR, 'ml', 'models', 'best_model.pth'))
-    FRONTEND_URL = os.environ.get('FRONTEND_URL', 'http://localhost:3000')
+    FRONTEND_URL = os.environ.get('FRONTEND_URL', 'https://godseye-three.vercel.app')
 
 class DevelopmentConfig(Config):
     DEBUG = True

@@ -23,11 +23,14 @@ class ImageDetectorService:
             if not os.path.isabs(model_path):
                 model_path = os.path.abspath(os.path.join(base_dir, model_path))
         else:
-            model_path = os.path.join(base_dir, 'ml', 'models', 'best_model.pth')
+            model_path = os.path.abspath(os.path.join(base_dir, 'ml', 'models', 'best_model.pth'))
 
         self.model_path = model_path
+        if not os.path.exists(self.model_path):
+            raise FileNotFoundError(f"Image detection model checkpoint not found at: '{self.model_path}'. Ensure best_model.pth is committed and deployed.")
+
         self.device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
-        self.model = get_efficientnet_model(model_path, pretrained=False).to(self.device)
+        self.model = get_efficientnet_model(self.model_path, pretrained=False).to(self.device)
         self.model.eval()
         self.transforms = get_transforms(is_training=False)
 
