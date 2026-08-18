@@ -152,7 +152,7 @@ When deploying the backend web service on Render, ensure the following configura
 * **Root Directory**: `backend`
 * **Build Command**:
   ```bash
-  pip install --upgrade pip && pip install --index-url https://download.pytorch.org/whl/cpu torch==2.3.0 torchvision==0.18.0 && pip install -r requirements.txt
+  pip install --upgrade pip && pip install --index-url https://download.pytorch.org/whl/cpu torch==2.3.0 torchvision==0.18.0 && pip install -r requirements.txt && python -c "import torch, torchvision; print('Torch:', torch.__version__); print('Torchvision:', torchvision.__version__)"
   ```
 * **Start Command**:
   ```bash
