@@ -6,7 +6,7 @@ from dotenv import load_dotenv
 BASE_DIR = os.path.abspath(os.path.dirname(__file__))
 load_dotenv(os.path.join(BASE_DIR, '.env'))
 
-from flask import Flask, jsonify
+from flask import Flask, jsonify, request
 from flask_cors import CORS
 from sqlalchemy import text
 
@@ -28,7 +28,6 @@ def create_app(config_name=None):
         "http://localhost:5173",
         "http://127.0.0.1:5173",
         "https://godseye-three.vercel.app",
-        r"https://.*\.vercel\.app"
     ]
 
     frontend_env = app.config.get('FRONTEND_URL') or os.environ.get('FRONTEND_URL')
@@ -45,6 +44,18 @@ def create_app(config_name=None):
         allow_headers=["Content-Type", "Authorization", "X-Requested-With", "Accept", "Origin"],
         supports_credentials=True
     )
+
+    @app.after_request
+    def apply_cors_headers(response):
+        origin = request.headers.get('Origin')
+        if origin:
+            is_allowed = origin in allowed_origins or (isinstance(origin, str) and origin.endswith('.vercel.app'))
+            if is_allowed:
+                response.headers['Access-Control-Allow-Origin'] = origin
+                response.headers['Access-Control-Allow-Credentials'] = 'true'
+                response.headers['Access-Control-Allow-Methods'] = 'GET, POST, OPTIONS'
+                response.headers['Access-Control-Allow-Headers'] = 'Content-Type, Authorization, X-Requested-With, Accept, Origin'
+        return response
 
     # Initialize Database & Flask-Migrate
     init_db(app)

@@ -81,13 +81,18 @@ def get_detection_status():
         }), 500
 
 
-@detection_bp.route('/analyze', methods=['POST'])
+@detection_bp.route('/analyze', methods=['POST', 'OPTIONS'])
 def analyze_file():
     """
     POST /api/detection/analyze
     Accepts multipart/form-data with key 'file'.
     Performs PyTorch EfficientNet-B0 + 2D FFT ML detection and saves record to Neon PostgreSQL.
     """
+    logger.info(f"{request.method} /api/detection/analyze - Origin: {request.headers.get('Origin')}")
+
+    if request.method == 'OPTIONS':
+        return '', 200
+
     raw_filename = "unknown"
     ext = "unknown"
     file_mimetype = "unknown"
