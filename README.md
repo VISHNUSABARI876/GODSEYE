@@ -158,5 +158,6 @@ When deploying the backend web service on Render, ensure the following configura
   ```bash
   gunicorn app:app
   ```
-> **Note**: Because the Root Directory is set to `backend`, do **NOT** use `--chdir backend` in the Start Command in the Render Web Dashboard UI.
+> **Note**: Because the Root Directory is set to `backend`, the Start Command is `gunicorn app:app` without any extra sub-directory flags.
+
 
