@@ -3,7 +3,7 @@ services:
     name: ai-image-video-detector-backend
     env: python
     pythonVersion: "3.12"
-    rootDir: backend
+    rootDir: AI-Image-Video-Detector/backend
     buildCommand: pip install --upgrade pip && pip install --index-url https://download.pytorch.org/whl/cpu torch==2.3.0 torchvision==0.18.0 && pip install -r requirements.txt && python -c "import torch; import torchvision; print('TORCH:', torch.__version__); print('TORCHVISION:', torchvision.__version__)"
     startCommand: gunicorn app:app
     envVars:
