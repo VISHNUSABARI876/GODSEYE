@@ -1,0 +1,28 @@
+{
+  "current_frame_model": {
+    "accuracy": 100.0,
+    "precision": 100.0,
+    "recall": 100.0,
+    "f1": 100.0,
+    "auc": 1.0
+  },
+  "new_temporal_model": {
+    "accuracy": 100.0,
+    "precision": 100.0,
+    "recall": 100.0,
+    "f1": 100.0,
+    "auc": 1.0
+  },
+  "fused_model": {
+    "accuracy": 100.0,
+    "precision": 100.0,
+    "recall": 100.0,
+    "f1": 100.0,
+    "auc": 1.0
+  },
+  "external_test_fused_accuracy": 100.0,
+  "selected_fusion_weights": {
+    "spatial": 0.25,
+    "temporal": 0.75
+  }
+}

@@ -1,0 +1,9 @@
+{
+  "spatial_weight": 0.25,
+  "temporal_weight": 0.75,
+  "classification_threshold": 0.3,
+  "uncertainty_lower": 0.25,
+  "uncertainty_upper": 0.35,
+  "disagreement_threshold": 0.4,
+  "sequence_length": 16
+}
